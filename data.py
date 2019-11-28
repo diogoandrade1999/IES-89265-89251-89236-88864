@@ -1,16 +1,20 @@
 import argparse
 import random
-from datetime import datetime, date
+import time
+import pika
+from datetime import datetime, date, timedelta
+import pprint
 
 
 users = {
 		'Diogo': {'start': '2019-07-01', 'days_per_week': 1.5, 'age': 20, 'weight': 61},
 		'André': {'start': '2008-11-01', 'days_per_week': 3, 'age': 40, 'weight': 83},
 		'Gonçalo': {'start': '2019-10-01', 'days_per_week': 1, 'age': 20, 'weight': 67},
-		'João': {'start': '2015-01-01', 'days_per_week': 2.5, 'age': 20, 'weight': 75}
+		'João': {'start': '2015-01-01', 'days_per_week': 2.5, 'age': 20, 'weight': 75},
+		'Alberto': {'start': '2018-10-01', 'days_per_week': 4, 'age': 70, 'weight': 73}
 		}
 
-type_exercises = ['legs', 'cardio', 'back', 'biceps', 'chest', 'triceps']
+type_exercises = ['legs', 'cardio', 'back', 'biceps', 'chest', 'triceps', 'shoulders']
 
 machines = {
 			'legs': ['Horizontal seated leg press', 'Hanging leg raise', 'Leg extension machine', 'Seated leg curl'], 
@@ -19,17 +23,27 @@ machines = {
 			'triceps': ['Cable triceps bar', 'triceps pushdown'], 
 			'chest': ['Chest press', 'Pec deck or chest flye'],
 			'cardio': ['Rowing machine'],
+			'shoulders': ['']
 			}
 
 
 initial_weight = lambda p: p/2
+
+def random_date(start, end):
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = random.randrange(int_delta)
+    return start + timedelta(seconds=random_second)
 
 
 def calc_weeks(start_date):
 	actual_date = str(date.today())
 	d1 = datetime.strptime(actual_date, "%Y-%m-%d")
 	d2 = datetime.strptime(start_date, "%Y-%m-%d")
-	return (d1 - d2).days / 7
+	if arg_time: d3 = d1
+	else: d3 = random_date(d2, d1)
+	weeks = (d3 - d2).days / 7
+	return d3, weeks
 
 
 def get_level(trainings):
@@ -68,7 +82,8 @@ def generate(name):
 	bad_choice = []
 	dicts = []
 	stats = users[name]
-	trainings = int(calc_weeks(stats['start']) * stats['days_per_week'])
+	date, weeks = calc_weeks(stats['start'])
+	trainings = int(weeks * stats['days_per_week'])
 	level = get_level(trainings)
 	weight = round(initial_weight(stats['weight']) * (calc_weight(level) - reduction_weight(stats['age'])), 2)
 	total_time = random.randint(45,75)
@@ -89,7 +104,7 @@ def generate(name):
 		total_time -= time
 		mydict = {
 				'name': name,
-				'date': str(date.today()),
+				'date': date.strftime('%Y-%m-%d'),
 				'time': time,
 				'type': type_exercise,
 				'machine': machine,
@@ -101,19 +116,36 @@ def generate(name):
 
 def main():
 	for name in users:
-		for k in range(number):
-			dicts, bad_choice = generate(name)
-			print(dicts)
-		if see: print(bad_choice)
+		bad_choices = []
+		if name == arg_name:
+			for k in range(number):
+				dicts, bad_choice = generate(name)
+				pprint.pprint(dicts)
+				bad_choices += [bad_choice]
+				time.sleep(1)
+				channel.basic_publish(exchange='',
+									routing_key=str(k),
+									body=str(dicts))
+			if see: print(bad_choices)
+			break
 
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Generate data!')
+	parser.add_argument('name', type=str, help='Name')
 	parser.add_argument('-n', default=1, type=int)
 	parser.add_argument('-s', nargs='?', const=True, default=False, type=bool)
+	parser.add_argument('-t', nargs='?', const=True, default=False, type=bool)
 	args = parser.parse_args()
 
+	arg_name = args.name
 	number = args.n
 	see = args.s
+	arg_time = args.t
+
+	connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+	channel = connection.channel()
 
 	main()
+
+	connection.close()
