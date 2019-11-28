@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from main.models import PollModel, ChoiceModel, DynamicPageModel
 import datetime
 from django.shortcuts import render
@@ -24,7 +26,7 @@ def create(request):
                      choices=choices)
     poll.save()
 
-    return HttpResponseRedirect("main:show")
+    return HttpResponseRedirect(reverse("main:show"))
 
 
 def show(request):
@@ -37,7 +39,7 @@ def show(request):
 
 def delete(request, document_id):
     PollModel.objects.filter(id=document_id).delete()
-    return HttpResponseRedirect("main:show")
+    return HttpResponseRedirect(reverse("main:show"))
 
 
 def create_dynamic(request):
@@ -45,4 +47,4 @@ def create_dynamic(request):
     dynamic_page.category = "category1"
     dynamic_page.tags = ["tag1", "tag2"]
     dynamic_page.save()
-    return HttpResponseRedirect("main:show")
+    return HttpResponseRedirect(reverse("main:show"))
