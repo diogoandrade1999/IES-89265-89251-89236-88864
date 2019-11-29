@@ -1,6 +1,10 @@
 from mongoengine import *
 
-connect('PollsDB')
+connect(
+    'teste_db',
+    host='172.17.0.1',
+    port=27017
+)
 
 
 class ChoiceModel(EmbeddedDocument):
