@@ -6,45 +6,17 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 
-def index(request):
-    data = {}
-    return render(request, "index.html", data)
+def index_view(request):
+    return render(request, "index.html")
 
 
-def create(request):
-    choice1 = ChoiceModel(choice_text="option a", votes=20)
-    choice2 = ChoiceModel(choice_text="option a", votes=12)
-    choice3 = ChoiceModel(choice_text="option a", votes=9)
-    choice4 = ChoiceModel(choice_text="option a", votes=21)
-
-    choices = [choice1, choice2, choice3, choice4]
-
-    poll = PollModel(question="This is a sample question", pub_date=datetime.datetime.now(), choices=choices)
-    poll.save()
-
-    poll = PollModel(question="This is another sample question with same choices", pub_date=datetime.datetime.now(),
-                     choices=choices)
-    poll.save()
-
-    return HttpResponseRedirect(reverse("main:show"))
+def trainees_view(request):
+    return render(request, "trainees.html")
 
 
-def show(request):
-    data = {}
-    p = PollModel.objects.all()
-    data["polls"] = p
-    data["dynamic_pages"] = DynamicPageModel.objects.all()
-    return render(request, "show.html", data)
+def charts_view(request):
+    return render(request, "charts.html")
 
 
-def delete(request, document_id):
-    PollModel.objects.filter(id=document_id).delete()
-    return HttpResponseRedirect(reverse("main:show"))
-
-
-def create_dynamic(request):
-    dynamic_page = DynamicPageModel(title="this is sample title")
-    dynamic_page.category = "category1"
-    dynamic_page.tags = ["tag1", "tag2"]
-    dynamic_page.save()
-    return HttpResponseRedirect(reverse("main:show"))
+def profile_view(request):
+    return render(request, "profile.html")
