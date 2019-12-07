@@ -223,10 +223,10 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="p-t-30">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.html" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="charts.html" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Charts</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="tables.html" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">Tables</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="trainees.html" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">My Trainees</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'index.html' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'charts.html' %}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">Charts</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'profile.html' %}" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">Tables</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'trainees.html' %}" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">My Trainees</span></a></li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -234,13 +234,18 @@
             <!-- End Sidebar scroll-->
         </aside>
         <div id="main-wrapper">
+            <div class="page-wrapper">
+                <div class="page-breadcrumb">
 
             {% block content %}
 
             {% endblock content %}
 
-            <footer class="footer text-center">
-                All Rights Reserved by Matrix-admin. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
+
+
+
+            <footer class="footer text-center" style="bottom: 0px; position: fixed;">
+                Designed and Developed by <a href="https://github.com/diogoandrade1999/IES-89265-89251-89236-88864">GymBit team</a>.
             </footer>
         </div>
     </div>

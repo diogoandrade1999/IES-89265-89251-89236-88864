@@ -5,6 +5,8 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+#Simple views just for the initial testing ------------------
+
 
 def index_view(request):
     return render(request, "index.html")
@@ -20,3 +22,7 @@ def charts_view(request):
 
 def profile_view(request):
     return render(request, "profile.html")
+
+
+def tables_view(request):
+    return render(request, "tables.html")

@@ -1,11 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
     {% load static %}
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
                         <h4 class="page-title">Dashboard</h4>
@@ -98,8 +93,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+{% endblock content %}
+
 {% block js %}
     <script src="{% static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>
     <!-- Bootstrap tether Core JavaScript -->
@@ -125,4 +120,3 @@
     <script src="{% static 'assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
     <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}"></script>
 {% endblock js %}
-{% endblock content %}
