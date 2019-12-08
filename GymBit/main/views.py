@@ -33,3 +33,15 @@ def profile_view(request):
 
 def tables_view(request):
     return render(request, "tables.html")
+
+
+def trainee_info_view(request):
+    return render(request, "trainee_profile.html")
+
+
+def login_view(request):
+    return render(request, "login.html")
+
+
+def register_view(request):
+    return render(request, "register.html")
