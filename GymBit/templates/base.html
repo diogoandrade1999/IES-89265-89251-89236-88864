@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html dir="ltr" lang="en" style="background: #EEEEEE;">
 
 {% load static  %}
 
@@ -50,7 +50,7 @@
                     <!-- ============================================================== -->
                     <!-- Logo -->
                     <!-- ============================================================== -->
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{% url 'index.html' %}">
                         <!-- Logo icon -->
                         <b class="logo-icon p-l-10">
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -201,7 +201,7 @@
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
                                 <a class="dropdown-item" href="{% url 'profile.html' %}"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="authentication-login.html"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                                <a class="dropdown-item" href="{% url 'login.html' %}"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
                             </div>
                         </li>
                         <!-- ============================================================== -->
@@ -244,7 +244,7 @@
 
 
 
-            <footer class="footer text-center" style="bottom: 0px; position: fixed;">
+            <footer class="footer text-center" style="bottom: 0px; position: center; background: #EEEEEE; width: 100%;">
                 Designed and Developed by <a href="https://github.com/diogoandrade1999/IES-89265-89251-89236-88864">GymBit team</a>.
             </footer>
         </div>
