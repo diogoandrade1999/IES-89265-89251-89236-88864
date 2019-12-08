@@ -3,18 +3,36 @@ from rest_framework import serializers
 
 
 class WorkModelSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
     class Meta:
         model = WorkModel
-        fields = ('user', 'type', 'machine', 'date', 'exercises')
+        fields = ('_id', 'user', 'type', 'machine', 'date', 'exercises')
 
 
 class ExercisesModelSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
     class Meta:
         model = ExercisesModel
         fields = ('weight', 'repetitions')
 
 
 class UserModelSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
     class Meta:
         model = UserModel
-        fields = ('weight', 'name', 'birth_date', 'start', 'email')
+        fields = ('_id', 'weight', 'name', 'birth_date', 'start', 'email')

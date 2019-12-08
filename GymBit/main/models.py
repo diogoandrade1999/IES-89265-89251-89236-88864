@@ -1,9 +1,9 @@
-from mongoengine import *
+import mongoengine
 
-connect(
+
+mongoengine.connect(
     'ies_db',
-    '''host='172.17.0.1',
-    port=27017'''
+    host='localhost'
 )
 
 '''
@@ -15,17 +15,18 @@ connect(
 '''
 
 
-class ExercisesModel(EmbeddedDocument):
-    weight = FloatField()
-    repetitions = IntField()
+class ExercisesModel(mongoengine.EmbeddedDocument):
+    weight = mongoengine.FloatField()
+    repetitions = mongoengine.IntField()
 
 
-class WorkModel(Document):
-    user = StringField()
-    type = StringField()
-    machine = StringField()
-    date = DateTimeField()
-    exercises = ListField(EmbeddedDocumentField(ExercisesModel))
+class WorkModel(mongoengine.Document):
+    _id = mongoengine.StringField()
+    user = mongoengine.StringField()
+    type = mongoengine.StringField()
+    machine = mongoengine.StringField()
+    date = mongoengine.DateTimeField()
+    exercises = mongoengine.ListField(mongoengine.EmbeddedDocumentField(ExercisesModel))
 
 
 '''
@@ -33,13 +34,25 @@ class WorkModel(Document):
 '''
 
 
-class UserModel(Document):
-    name = StringField()
-    email = EmailField()
-    birth_date = DateTimeField()
-    start = DateTimeField()
-    weight = FloatField()
+class UserModel(mongoengine.Document):
+    _id = mongoengine.StringField()
+    name = mongoengine.StringField()
+    email = mongoengine.EmailField()
+    birth_date = mongoengine.DateTimeField()
+    start = mongoengine.DateTimeField()
+    weight = mongoengine.FloatField()
 
+
+'''
+{'name': 'José', 'email': 'jose@gym.pt', 'password': '1234'}
+'''
+
+
+class PersonalModel(mongoengine.Document):
+    _id = mongoengine.StringField()
+    name = mongoengine.StringField()
+    email = mongoengine.EmailField()
+    password = mongoengine.StringField()
 
 '''
 class DynamicPageModel(DynamicDocument):

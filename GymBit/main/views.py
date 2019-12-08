@@ -22,9 +22,10 @@ def charts_view(request):
 
 @api_view(['GET'])
 def profile_view(request):
-    #id = int(request.GET['id'])
+    # id = int(request.GET['id'])
     try:
-        user = UserModel.objects.get(name='Diogo')
+        user = UserModel.objects.first()  # .get(name='Diogo')
+        print(user)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = UserModelSerializer(user)
