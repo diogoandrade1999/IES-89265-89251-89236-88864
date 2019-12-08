@@ -29,18 +29,20 @@ machines = {
 
 initial_weight = lambda p: p/2
 
+
 def random_date(start, end):
-    delta = end - start
-    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
-    random_second = random.randrange(int_delta)
-    return start + timedelta(seconds=random_second)
+    days = random.randint(0, (end - start).days)
+    hours = random.randint(9, 20)
+    minutes = random.randint(0, 59)
+    seconds = random.randint(0, 60)
+    return start + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
 
 
 def calc_weeks(start_date):
 	actual_date = str(date.today())
 	d1 = datetime.strptime(actual_date, "%Y-%m-%d")
 	d2 = datetime.strptime(start_date, "%Y-%m-%d")
-	if arg_time: d3 = d1
+	if arg_time: d3 = random_date(d1, d1)
 	else: d3 = random_date(d2, d1)
 	weeks = (d3 - d2).days / 7
 	return d3, weeks
@@ -96,20 +98,20 @@ def generate(name):
 		if type_exercise != choose: bad_choice += [[name, choose, type_exercise]]
 		for x in range(random.randint(1,3)):
 			repetitions = random.randint(3,5)
-			exercise = {'repetitions': repetitions, 'Weight': weight}
+			exercise = {'repetitions': repetitions, 'weight': weight}
 			exercises.append(exercise)
 			weight = round(initial_weight(stats['weight']) * (calc_weight(level) - (repetitions * reduction_weight(stats['age']))), 2)
 			time += repetitions
 		time += random.randint(1, time)
 		total_time -= time
 		mydict = {
-				'name': name,
-				'date': date.strftime('%Y-%m-%d'),
-				'time': time,
+				'user': name,
+				'date': date.strftime('%Y-%m-%d %H:%M:%S'),
 				'type': type_exercise,
 				'machine': machine,
 				'exercises' : exercises
 				}
+		date += timedelta(minutes=time)
 		dicts.append(mydict)
 	return dicts, bad_choice
 
@@ -124,7 +126,7 @@ def main():
 				bad_choices += [bad_choice]
 				time.sleep(1)
 				channel.basic_publish(exchange='',
-									routing_key=str(k),
+									routing_key='population',
 									body=str(dicts))
 			if see: print(bad_choices)
 			break

@@ -1,2 +1,3 @@
 /.metadata/
-GymBit/ven/
+GymBit/venv/
+/__pycache__/

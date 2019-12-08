@@ -1,11 +1,9 @@
-from django.urls import reverse
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from main.serializers import WorkModelSerializer, ExercisesModelSerializer, UserModelSerializer
 
-from main.models import PollModel, ChoiceModel, DynamicPageModel
-import datetime
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-
-#Simple views just for the initial testing ------------------
 
 
 def index_view(request):
