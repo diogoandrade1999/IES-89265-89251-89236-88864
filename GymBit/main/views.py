@@ -21,6 +21,7 @@ def index_view(request):
 def trainees_view(request):
     try:
         users = UserModel.objects.all()
+        print(users)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return render(request, "trainees.html", {'users': users})
