@@ -46,8 +46,12 @@ def tables_view(request):
 
 
 @login_required
-def trainee_info_view(request):
-    return render(request, "trainee_profile.html")
+def trainee_info_view(request, name):
+    try:
+        user = UserModel.objects.get(name=name)
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    return render(request, "trainee_profile.html", {'user': user})
 
 
 def login_view(request):

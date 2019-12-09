@@ -8,6 +8,7 @@
         {% csrf_token %}
         <h1>User x info</h1>
         {{ form }}
+        <h4>start: </h4><span>{{ user.start }}</span><br>
    <input type="button" class="btn btn-secondary btn-lg" value="Return" data-toggle="modal" data-target="#exampleModal">
    <input type="button" class="btn btn-success btn-lg" style="float: right" value="Update" data-toggle="modal" data-target="#exampleModal2">
    <div>

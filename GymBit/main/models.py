@@ -22,7 +22,7 @@ class ExercisesModel(mongoengine.EmbeddedDocument):
 
 
 class WorkModel(mongoengine.Document):
-    _id = mongoengine.StringField()
+    _id = mongoengine.ObjectIdField()
     user = mongoengine.StringField()
     type = mongoengine.StringField()
     machine = mongoengine.StringField()
@@ -37,7 +37,7 @@ class WorkModel(mongoengine.Document):
 
 
 class UserModel(mongoengine.Document):
-    _id = mongoengine.StringField()
+    _id = mongoengine.ObjectIdField()
     name = mongoengine.StringField()
     email = mongoengine.EmailField()
     birth_date = mongoengine.DateTimeField()
