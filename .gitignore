@@ -1,4 +1,4 @@
 /.metadata/
 GymBit/venv/
-/__pycache__/
-/.idea/
+GymBit/__pycache__/
+GymBit/.idea/
