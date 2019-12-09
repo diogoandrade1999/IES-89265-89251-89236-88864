@@ -26,9 +26,23 @@ machines = {
 			'shoulders': ['']
 			}
 
+heartbeat_age = {20: [100, 170], 30: [95, 162], 35: [93, 157], 40: [90, 153], 45: [88, 149],
+				50: [85, 145], 55: [83, 140], 60: [80, 136], 65: [78, 132], 70: [75, 128]}
 
 initial_weight = lambda p: p/2
 
+
+def get_heartbeat_age(age):
+	if age <= 20: return 20
+	if age <= 30: return 30
+	if age <= 35: return 35
+	if age <= 40: return 40
+	if age <= 45: return 45
+	if age <= 50: return 50
+	if age <= 55: return 55
+	if age <= 60: return 60
+	if age <= 65: return 65
+	return 70
 
 def random_date(start, end):
     days = random.randint(0, (end - start).days)
@@ -104,12 +118,14 @@ def generate(name):
 			time += repetitions
 		time += random.randint(1, time)
 		total_time -= time
+		heartbeat = heartbeat_age[get_heartbeat_age(stats['age'])]
 		mydict = {
 				'user': name,
 				'date': date.strftime('%Y-%m-%d %H:%M:%S'),
 				'type': type_exercise,
 				'machine': machine,
-				'exercises' : exercises
+				'exercises': exercises,
+				'heartbeat': random.randint(heartbeat[0], heartbeat[1])
 				}
 		date += timedelta(minutes=time)
 		dicts.append(mydict)
