@@ -10,6 +10,7 @@ mongoengine.connect(
 {'date': '2019-12-08 12:38:18',
   'exercises': [{'weight': 38.12, 'repetitions': 3}],
   'machine': 'Cable triceps bar',
+  'heartbeat': 164,
   'user': 'Diogo',
   'type': 'triceps'}
 '''
@@ -26,6 +27,7 @@ class WorkModel(mongoengine.Document):
     type = mongoengine.StringField()
     machine = mongoengine.StringField()
     date = mongoengine.DateTimeField()
+    heartbeat = mongoengine.IntField()
     exercises = mongoengine.ListField(mongoengine.EmbeddedDocumentField(ExercisesModel))
 
 
@@ -47,13 +49,13 @@ class UserModel(mongoengine.Document):
 {'name': 'José', 'email': 'jose@gym.pt', 'password': '1234'}
 '''
 
-
+'''
 class PersonalModel(mongoengine.Document):
     _id = mongoengine.StringField()
     name = mongoengine.StringField()
     email = mongoengine.EmailField()
     password = mongoengine.StringField()
-
+'''
 '''
 class DynamicPageModel(DynamicDocument):
     title = StringField(max_length=150, required=True)

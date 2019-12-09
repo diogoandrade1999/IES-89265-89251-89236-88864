@@ -18,6 +18,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (GymBit)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Project" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

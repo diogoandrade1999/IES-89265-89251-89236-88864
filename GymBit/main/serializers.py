@@ -11,7 +11,7 @@ class WorkModelSerializer(serializers.Serializer):
 
     class Meta:
         model = WorkModel
-        fields = ('_id', 'user', 'type', 'machine', 'date', 'exercises')
+        fields = ('_id', 'user', 'type', 'machine', 'date', 'exercises', 'heartbeat')
 
 
 class ExercisesModelSerializer(serializers.Serializer):
@@ -36,3 +36,17 @@ class UserModelSerializer(serializers.Serializer):
     class Meta:
         model = UserModel
         fields = ('_id', 'weight', 'name', 'birth_date', 'start', 'email')
+
+
+'''
+class PersonalModelSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+    class Meta:
+        model = PersonalModel
+        fields = ('_id', 'name', 'password', 'email')
+'''
