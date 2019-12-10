@@ -5,8 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from main.serializers import WorkModelSerializer, ExercisesModelSerializer, UserModelSerializer
-from main.models import UserModel, WorkModel, ExercisesModel
+from main.serializers import WorkModelSerializer, UserModelSerializer
+from main.models import UserModel, WorkModel
 
 from django.shortcuts import render
 import io
@@ -49,9 +49,10 @@ def tables_view(request):
 def trainee_info_view(request, name):
     try:
         user = UserModel.objects.get(name=name)
+        work = WorkModel.objects.filter(user=name)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    return render(request, "trainee_profile.html", {'user': user})
+    return render(request, "trainee_profile.html", {'user': user, 'work': work})
 
 
 def login_view(request):
