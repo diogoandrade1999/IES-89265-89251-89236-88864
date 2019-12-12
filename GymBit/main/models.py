@@ -3,9 +3,7 @@ import mongoengine
 
 mongoengine.connect(
     'ies_db',
-    host='192.168.160.212',
-    port=27017,
-    password='iespass'
+    host='localhost',
 )
 
 '''

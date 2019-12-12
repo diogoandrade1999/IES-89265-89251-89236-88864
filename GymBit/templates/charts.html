@@ -246,6 +246,6 @@
     <script src="{% static 'assets/libs/chart/jquery.flot.pie.min.js' %}"></script>
     <script src="{% static 'assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
     <script src="{% static 'assets/libs/chart/turning-series.js' %}"></script>
-    <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}"></script>
+    <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}">var testing = "{{ work.machine }}";</script>
 
     {% endblock js %}
