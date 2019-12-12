@@ -133,5 +133,5 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-LOGIN_REDIRECT_URL = 'index.html'
+LOGIN_REDIRECT_URL = 'trainees.html'
 LOGIN_URL = 'login.html'

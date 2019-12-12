@@ -9,7 +9,6 @@ from main.serializers import WorkModelSerializer, UserModelSerializer
 from main.models import UserModel, WorkModel
 
 from django.shortcuts import render
-import io
 
 
 @login_required
@@ -32,9 +31,10 @@ def charts_view(request):
 
 
 @login_required
+@api_view(['GET'])
 def profile_view(request):
     try:
-        user = User.objects.get(username=request.user)
+        user = User.objects.get(pk=request.user.pk)
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return render(request, "profile.html", {'user': user})
@@ -49,7 +49,7 @@ def tables_view(request):
 def trainee_info_view(request, name):
     try:
         user = UserModel.objects.get(name=name)
-        work = WorkModel.objects.filter(user=name)
+        work = WorkModel.objects.filter(user=name).order_by('-date')
     except ObjectDoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return render(request, "trainee_profile.html", {'user': user, 'work': work})
@@ -63,12 +63,12 @@ def login_view(request):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
-                return index_view(request)
+                return trainees_view(request)
     return render(request, "login.html")
 
 
 @login_required
-def log_out(request):
+def logout_view(request):
     logout(request)
     return login_view(request)
 
