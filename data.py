@@ -1,11 +1,14 @@
-import argparse
 import random
-import time
-import pika
-from datetime import datetime, date, timedelta
+import time as timer
 import pprint
+import pymongo
+import argparse
+import urllib.request
+from datetime import datetime, date, timedelta
 
 
+users = []
+'''
 users = {
 		'Diogo': {'start': '2019-07-01', 'days_per_week': 1.5, 'age': 20, 'weight': 61},
 		'André': {'start': '2008-11-01', 'days_per_week': 3, 'age': 40, 'weight': 83},
@@ -13,7 +16,7 @@ users = {
 		'João': {'start': '2015-01-01', 'days_per_week': 2.5, 'age': 20, 'weight': 75},
 		'Alberto': {'start': '2018-10-01', 'days_per_week': 4, 'age': 70, 'weight': 73}
 		}
-
+'''
 type_exercises = ['legs', 'cardio', 'back', 'biceps', 'chest', 'triceps', 'shoulders']
 
 machines = {
@@ -23,13 +26,22 @@ machines = {
 			'triceps': ['Cable triceps bar', 'triceps pushdown'], 
 			'chest': ['Chest press', 'Pec deck or chest flye'],
 			'cardio': ['Rowing machine'],
-			'shoulders': ['']
+			'shoulders': ['Shoulders machine']
 			}
 
 heartbeat_age = {20: [100, 170], 30: [95, 162], 35: [93, 157], 40: [90, 153], 45: [88, 149],
 				50: [85, 145], 55: [83, 140], 60: [80, 136], 65: [78, 132], 70: [75, 128]}
 
-initial_weight = lambda p: p/2
+
+def initial_weight(weight):
+	return weight/2
+
+
+def calculateAge(birthDate): 
+	today = date.today() 
+	birthDate = datetime.strptime(birthDate, "%Y-%m-%d")
+	age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day)) 
+	return age
 
 
 def get_heartbeat_age(age):
@@ -44,6 +56,7 @@ def get_heartbeat_age(age):
 	if age <= 65: return 65
 	return 70
 
+
 def random_date(start, end):
     days = random.randint(0, (end - start).days)
     hours = random.randint(9, 20)
@@ -56,7 +69,7 @@ def calc_weeks(start_date):
 	actual_date = str(date.today())
 	d1 = datetime.strptime(actual_date, "%Y-%m-%d")
 	d2 = datetime.strptime(start_date, "%Y-%m-%d")
-	if arg_time: d3 = random_date(d1, d1)
+	if False: d3 = random_date(d1, d1)
 	else: d3 = random_date(d2, d1)
 	weeks = (d3 - d2).days / 7
 	return d3, weeks
@@ -94,14 +107,46 @@ def reduction_weight(age):
 	return 0.05
 
 
-def generate(name):
+def load_users():
+	users = []
+	for user in collection3.find():
+		users.append(user)
+	return users
+
+
+def load(time, bits):
+	dados = []
+	response = urllib.request.urlopen("http://2.80.15.51/download_data?file=Bob_raw1.dat")
+	data = response.read()
+	data = data.decode().split('\n\n')[1:]
+	d = []
+	for x in range(0, len(data)):
+		y = data[x].split('\n')
+		n = y[0].split(',')[0]
+		if len(y) == 2:
+			if n != '33':
+				d.append(n)
+			dados.append(d)
+			d = []
+			if y[1].split(',')[0] != '33':
+				d.append(y[1].split(',')[0])
+		else:
+			if n != '33':
+				d.append(n)
+		if len(dados) + len(d) + bits >= time*64:
+			dados.append(d)
+			break
+	return dados
+
+
+def generate(user):
 	bad_choice = []
 	dicts = []
-	stats = users[name]
-	date, weeks = calc_weeks(stats['start'])
-	trainings = int(weeks * stats['days_per_week'])
+	trash = []
+	date, weeks = calc_weeks(user['start'])
+	trainings = int(weeks * 2.5)
 	level = get_level(trainings)
-	weight = round(initial_weight(stats['weight']) * (calc_weight(level) - reduction_weight(stats['age'])), 2)
+	weight = round(initial_weight(user['weight']) * (calc_weight(level) - reduction_weight(calculateAge(user['birth_date']))), 2)
 	total_time = random.randint(45,75)
 	while total_time > 0:
 		exercises = []
@@ -109,46 +154,58 @@ def generate(name):
 		choose = type_exercises[random.randint(0,5)]
 		type_exercise = choose_exercise(level, choose)
 		machine = machines[type_exercise][random.randint(0,len(machines[type_exercise])-1)]
-		if type_exercise != choose: bad_choice += [[name, choose, type_exercise]]
+		if type_exercise != choose: bad_choice += [[user, choose, type_exercise]]
 		for x in range(random.randint(1,3)):
 			repetitions = random.randint(3,5)
 			exercise = {'repetitions': repetitions, 'weight': weight}
 			exercises.append(exercise)
-			weight = round(initial_weight(stats['weight']) * (calc_weight(level) - (repetitions * reduction_weight(stats['age']))), 2)
+			weight = round(initial_weight(user['weight']) * (calc_weight(level) - (repetitions * reduction_weight(calculateAge(user['birth_date'])))), 2)
 			time += repetitions
 		time += random.randint(1, time)
 		total_time -= time
-		heartbeat = heartbeat_age[get_heartbeat_age(stats['age'])]
+		heartbeat = heartbeat_age[get_heartbeat_age(calculateAge(user['birth_date']))]
 		mydict = {
-				'user': name,
+				'user_id': user['user_id'],
 				'date': date.strftime('%Y-%m-%d %H:%M:%S'),
-				'type': type_exercise,
+				'type_exercise': type_exercise,
 				'machine': machine,
 				'exercises': exercises,
 				'heartbeat': random.randint(heartbeat[0], heartbeat[1])
 				}
 		date += timedelta(minutes=time)
-		dicts.append(mydict)
-	return dicts, bad_choice
+		dados = 0
+		while dados < time*64*60:
+			bits = load(time, dados)
+			dados += len(bits)
+			for sec in bits:
+				message = {'user_id': user['user_id'], 'bits': sec}
+				trash.append(message)
+				# print('insert', message)
+				collection2.insert_one(message)
+				if len(trash) > 60:
+					collection2.remove(trash.pop(0))
+					# print('remove', message)
+				timer.sleep(1)
+		collection1.insert_one(mydict)
+	timer.sleep(60)
+	for t in trash:
+		# print('remove', message)
+		collection2.remove(t)
 
 
 def main():
-	for name in users:
-		bad_choices = []
-		if name == arg_name:
-			for k in range(number):
-				dicts, bad_choice = generate(name)
-				pprint.pprint(dicts)
-				bad_choices += [bad_choice]
-				time.sleep(1)
-				channel.basic_publish(exchange='',
-									routing_key='population',
-									body=str(dicts))
-			if see: print(bad_choices)
-			break
+	global users
+	while True:
+		users = load_users()
+		n_users = random.randint(1, int(len(users)/2))
+		users = random.choices(users, k=n_users)
+
+		for user in users:
+			generate(user)
 
 
 if __name__ == '__main__':
+	'''
 	parser = argparse.ArgumentParser(description='Generate data!')
 	parser.add_argument('name', type=str, help='Name')
 	parser.add_argument('-n', default=1, type=int)
@@ -159,11 +216,13 @@ if __name__ == '__main__':
 	arg_name = args.name
 	number = args.n
 	see = args.s
-	arg_time = args.t
+	False = args.t
+	'''
 
-	connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-	channel = connection.channel()
+	client = pymongo.MongoClient('localhost',27017)
+	db = client.ies_db
+	collection1 = db.work_model
+	collection2 = db.bit_model
+	collection3 = db.user_model
 
 	main()
-
-	connection.close()

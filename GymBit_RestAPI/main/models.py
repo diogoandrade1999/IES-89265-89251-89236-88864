@@ -23,7 +23,7 @@ class ExercisesModel(mongoengine.EmbeddedDocument):
 class WorkModel(mongoengine.Document):
     _id = mongoengine.ObjectIdField()
     user_id = mongoengine.IntField()
-    type = mongoengine.StringField()
+    type_exercise = mongoengine.StringField()
     machine = mongoengine.StringField()
     date = mongoengine.DateTimeField()
     heartbeat = mongoengine.IntField()
@@ -40,4 +40,4 @@ class UserModel(mongoengine.Document):
     weight = mongoengine.FloatField()
     height = mongoengine.FloatField()
     personal_trainer = mongoengine.StringField()
-    opinion = mongoengine.StringField()
+    medical_condicions = mongoengine.StringField()
