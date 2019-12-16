@@ -41,3 +41,9 @@ class UserModel(mongoengine.Document):
     height = mongoengine.FloatField()
     personal_trainer = mongoengine.StringField()
     medical_condicions = mongoengine.StringField()
+
+
+class BitModel(mongoengine.Document):
+    _id = mongoengine.ObjectIdField()
+    user_id = mongoengine.IntField()
+    bits = mongoengine.ListField(mongoengine.StringField())

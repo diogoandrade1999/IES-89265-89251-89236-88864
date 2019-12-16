@@ -1,5 +1,5 @@
 from main.serializers import WorkModelSerializer, UserModelSerializer
-from main.models import UserModel, WorkModel
+from main.models import UserModel, WorkModel, ChartModel
 
 from rest_framework_mongoengine import viewsets
 
@@ -26,3 +26,11 @@ class ProfileView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return UserModel.objects.all()
+
+
+class ChartView(viewsets.ModelViewSet):
+    lookup_field = 'user_id'
+    serializer_class = ChartModelSerializer
+
+    def get_queryset(self):
+        return ChartModel.objects.all()

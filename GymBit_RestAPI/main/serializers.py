@@ -1,4 +1,4 @@
-from main.models import WorkModel, ExercisesModel, UserModel
+from main.models import WorkModel, ExercisesModel, UserModel, BitModel
 from rest_framework_mongoengine.serializers import DocumentSerializer, EmbeddedDocumentSerializer
 
 
@@ -17,4 +17,10 @@ class ExercisesModelSerializer(EmbeddedDocumentSerializer):
 class UserModelSerializer(DocumentSerializer):
     class Meta:
         model = UserModel
+        fields = '__all__'
+
+
+class BitModelSerializer(DocumentSerializer):
+    class Meta:
+        model = BitModel
         fields = '__all__'
