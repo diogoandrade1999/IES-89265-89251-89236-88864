@@ -1,5 +1,5 @@
 from main.serializers import WorkModelSerializer, UserModelSerializer
-from main.models import UserModel, WorkModel, ChartModel
+from main.models import UserModel, WorkModel, BitModel
 
 from rest_framework_mongoengine import viewsets
 
@@ -30,7 +30,7 @@ class ProfileView(viewsets.ModelViewSet):
 
 class ChartView(viewsets.ModelViewSet):
     lookup_field = 'user_id'
-    serializer_class = ChartModelSerializer
+    serializer_class = BitModelSerializer
 
     def get_queryset(self):
-        return ChartModel.objects.all()
+        return BitModel.objects.all()
