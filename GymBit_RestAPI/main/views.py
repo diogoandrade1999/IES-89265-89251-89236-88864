@@ -1,4 +1,4 @@
-from main.serializers import WorkModelSerializer, UserModelSerializer
+from main.serializers import WorkModelSerializer, UserModelSerializer, BitModelSerializer
 from main.models import UserModel, WorkModel, BitModel
 
 from rest_framework_mongoengine import viewsets
@@ -28,7 +28,7 @@ class ProfileView(viewsets.ModelViewSet):
         return UserModel.objects.all()
 
 
-class ChartView(viewsets.ModelViewSet):
+class ChartsView(viewsets.ModelViewSet):
     lookup_field = 'user_id'
     serializer_class = BitModelSerializer
 
