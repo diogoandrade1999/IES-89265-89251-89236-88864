@@ -26,9 +26,13 @@ def trainees_view(request):
 
 
 @login_required
-def charts_view(request):
-    return render(request, "charts.html")
-
+def charts_view(request, name):
+    try:
+        user = UserModel.objects.get(name=name)
+        work = WorkModel.objects.filter(user=name).order_by('-date')
+    except ObjectDoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    return render(request, "charts.html", {'user': user, 'work': work})
 
 @login_required
 @api_view(['GET'])

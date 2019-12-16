@@ -5,7 +5,7 @@
     // Real Time Visits
     // ==============================================================
     var data = [5, 10, 15, 20, 15, 30, 40],
-        totalPoints = 100;
+        totalPoints = 200;
 
     function getRandomData() {
         if (data.length > 0) data = data.slice(1);
@@ -15,8 +15,8 @@
                 y = prev + Math.random() * 10 - 5;
             if (y < 0) {
                 y = 0;
-            } else if (y > 100) {
-                y = 100;
+            } else if (y > 200) {
+                y = 200;
             }
             data.push(y);
         }
@@ -28,7 +28,7 @@
         return res;
     }
     // Set up the control widget
-    var updateInterval = 1000;
+    var updateInterval = 200;
     $("#updateInterval").val(updateInterval).change(function() {
         var v = $(this).val();
         if (v && !isNaN(+v)) {
@@ -48,7 +48,7 @@
         },
         yaxis: {
             min: 0,
-            max: 100,
+            max: 200,
             show: true
         },
         xaxis: {
@@ -63,7 +63,7 @@
         },
         tooltip: true,
         tooltipOpts: {
-            content: "Visits: %x",
+            content: "THIS IS WHERE THE VALUE IS SUPPOSE TO BE ---------",
             defaultTheme: false
         }
     });

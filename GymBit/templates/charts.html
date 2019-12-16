@@ -153,7 +153,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title m-b-0">Progress Box</h4>
+                        <h4 class="card-title m-b-0">Progress Box {{ user.name }} </h4>
                         <div class="m-t-20">
                             <div class="d-flex no-block align-items-center">
                                 <span>81% Clicks</span>
@@ -246,6 +246,6 @@
     <script src="{% static 'assets/libs/chart/jquery.flot.pie.min.js' %}"></script>
     <script src="{% static 'assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
     <script src="{% static 'assets/libs/chart/turning-series.js' %}"></script>
-    <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}">var testing = "{{ work.machine }}";</script>
+    <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}">var testing = "{{ user.name }}";</script>
 
     {% endblock js %}
