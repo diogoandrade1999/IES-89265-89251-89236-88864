@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from .fusioncharts import FusionCharts
+from main.fusioncharts import FusionCharts
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -37,6 +37,7 @@ def calc_weeks(start_date):
     d2 = datetime.strptime(start_date, "%Y-%m-%d")
     weeks = (d1 - d2).days / 7
     return weeks
+
 
 @login_required
 def index_view(request):
@@ -85,18 +86,19 @@ def charts_view(request, id):
     result = requests.get(API_URL + "charts")
     work = []
     if result.status_code == status.HTTP_200_OK:
-        data = result.json()
-        for obj in data:
+        data2 = result.json()
+        count = 0
+        for obj in data2:
             if obj['user_id'] == id:
                 for o in obj['bits']:
                     try:
-                        o = float(o)
-                        work.append(o)
+                        work.append({"label": str(count), "value": o})
+                        count += 1
                     except ValueError:
                         pass
     # Create an object for the Column 2D chart using the FusionCharts class constructor
     column2D = FusionCharts("column2D", "ex1", "600", "350", "chart-1", "json", dataSource)
-    return render(request, "charts.html", {'user': user, 'work': work, 'output': column2D.render()})
+    return render(request, "charts.html", {'user': user, 'work': work[-200:], 'output': column2D.render()})
 
 
 @login_required
