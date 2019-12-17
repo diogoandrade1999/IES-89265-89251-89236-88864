@@ -133,7 +133,7 @@ def load(time, bits):
 		else:
 			if n != '33':
 				d.append(n)
-		if len(dados) + len(d) + bits >= time*64:
+		if len(dados) + bits >= time*60:
 			dados.append(d)
 			break
 	return dados
@@ -174,7 +174,7 @@ def generate(user):
 				}
 		date += timedelta(minutes=time)
 		dados = 0
-		while dados < time*64*60:
+		while dados < time*60:
 			bits = load(time, dados)
 			dados += len(bits)
 			for sec in bits:
@@ -226,3 +226,4 @@ if __name__ == '__main__':
 	collection3 = db.user_model
 
 	main()
+

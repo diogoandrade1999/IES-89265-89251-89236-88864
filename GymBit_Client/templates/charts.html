@@ -4,7 +4,7 @@
 
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">All Statistics</h4>
+                        <h4 class="page-title">All Statistics {{ work }}</h4>
                     </div>
                 </div>
             </div>
@@ -245,7 +245,143 @@
     <script src="{% static 'assets/libs/chart/matrix.charts.js' %}"></script>
     <script src="{% static 'assets/libs/chart/jquery.flot.pie.min.js' %}"></script>
     <script src="{% static 'assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
-    <script src="{% static 'assets/libs/chart/turning-series.js' %}"></script>
+    <!--<script src="{% static 'assets/libs/chart/turning-series.js' %}"></script>-->
+    <script type="text/javascript">
+          $(function() {
+            // we use an inline data source in the example, usually data would
+            // be fetched from a server
+           // ==============================================================
+            // Real Time Visits
+            // ==============================================================
+            var data = {{ work }},
+                totalPoints = {{ work.length }};
+
+            function getRandomData() {
+                if (data.length > 0) data = data.slice(1);
+                // Do a random walk
+                while (data.length < totalPoints) {
+                    var prev = data.length > 0 ? data[data.length - 1] : 10,
+                        y = prev + Math.random() * 10 - 5;
+                    if (y < 0) {
+                        y = 0;
+                    } else if (y > 100) {
+                        y = 100;
+                    }
+                    data.push(y);
+                }
+                // Zip the generated y values with the x values
+                var res = [];
+                for (var i = 0; i < data.length; ++i) {
+                    res.push([i, data[i]])
+                }
+                return res;
+            }
+            // Set up the control widget
+            var updateInterval = 1000;
+            $("#updateInterval").val(updateInterval).change(function() {
+                var v = $(this).val();
+                if (v && !isNaN(+v)) {
+                    updateInterval = +v;
+                    if (updateInterval < 1) {
+                        updateInterval = 1;
+                    } else if (updateInterval > 1000) {
+                        updateInterval = 1000;
+                    }
+                    $(this).val("" + updateInterval);
+                }
+            });
+            var plot = $.plot("#real-time", [getRandomData()], {
+                series: {
+                    shadowSize: 1, // Drawing is faster without shadows
+                    lines: { fill: true, fillColor: 'transparent' },
+                },
+                yaxis: {
+                    min: 0,
+                    max: 100,
+                    show: true
+                },
+                xaxis: {
+                    show: false
+                },
+                colors: ["#488c13"],
+                grid: {
+                    color: "#AFAFAF",
+                    hoverable: true,
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "Visits: " + {{ work.first }} +"x",
+                    defaultTheme: false
+                }
+            });
+            window.onresize = function(event) {
+                $.plot($("#real-time"), [getRandomData()]);
+            }
+
+            function update() {
+                plot.setData([getRandomData()]);
+                // Since the axes don't change, we don't need to call plot.setupGrid()
+                plot.draw();
+                setTimeout(update, updateInterval);
+            }
+            update();
+
+                console.log("document ready");
+                var offset = 0;
+                plot1();
+
+                function plot1() {
+                    var sin = []
+                        , cos = [];
+                    for (var i = 0; i < 12; i += 0.2) {
+                        sin.push([i, Math.sin(i + offset)]);
+                        cos.push([i, Math.cos(i + offset)]);
+                    }
+                    var options = {
+                        series: {
+                            lines: {
+                                show: true
+                            }
+                            , points: {
+                                show: true
+                            }
+                        }
+                        , grid: {
+                            hoverable: true //IMPORTANT! this is needed for tooltip to work
+                        }
+                        , yaxis: {
+                            min: -1.2
+                            , max: 1.2
+                        }
+                        , colors: ["#ee7951", "#4fb9f0"]
+                        , grid: {
+                            color: "#AFAFAF"
+                            , hoverable: true
+                            , borderWidth: 0
+                            , backgroundColor: '#FFF'
+                        }
+                        , tooltip: true
+                        , tooltipOpts: {
+                            content: "'%s' of %x.1 is %y.4"
+                            , shifts: {
+                                x: -60
+                                , y: 25
+                            }
+                        }
+                    };
+                    var plotObj = $.plot($("#flot-line-chart"), [{
+                        data: sin
+                        , label: "sin(x)"
+                    , }, {
+                        data: cos
+                        , label: "cos(x)"
+                        }], options);
+                }
+
+        });
+    </script>
     <script src="{% static 'dist/js/pages/chart/chart-page-init.js' %}"></script>
 
     {% endblock js %}

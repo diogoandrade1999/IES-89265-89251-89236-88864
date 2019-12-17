@@ -63,7 +63,7 @@
         },
         tooltip: true,
         tooltipOpts: {
-            content: "Visits: %x",
+            content: "Visits: " + a[0].toString() +"x",
             defaultTheme: false
         }
     });
