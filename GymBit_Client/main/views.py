@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 import requests
 
 from django.contrib.auth.decorators import login_required
@@ -27,9 +29,25 @@ def register_view(request):
     return render(request, "register.html")
 
 
+def calc_weeks(start_date):
+    actual_date = str(date.today())
+    d1 = datetime.strptime(actual_date, "%Y-%m-%d")
+    d2 = datetime.strptime(start_date, "%Y-%m-%d")
+    weeks = (d1 - d2).days / 7
+    return weeks
+
 @login_required
 def index_view(request):
-    return render(request, "index.html")
+    # get the trainee from the api
+    result = requests.get(API_URL + "trainees")
+    users = []
+    if result.status_code == status.HTTP_200_OK:
+        users = result.json()
+        news = 0
+        for u in users:
+            if calc_weeks(u['start']) < 5:
+                news += 1
+    return render(request, "index.html", {'total': len(users), 'total_1': len(users)-1, 'news': news})
 
 
 @login_required
@@ -44,7 +62,6 @@ def charts_view(request, id):
     work = []
     if result.status_code == status.HTTP_200_OK:
         data = result.json()
-        print(data)
         for obj in data:
             if obj['user_id'] == id:
                 for o in obj['bits']:
@@ -75,7 +92,6 @@ def trainees_view(request):
     users = []
     if result.status_code == status.HTTP_200_OK:
         user = result.json()
-        print(user)
         if user['personal_trainer'] == 'True':
             # get all trainees from the api
             result = requests.get(API_URL + "trainees")
