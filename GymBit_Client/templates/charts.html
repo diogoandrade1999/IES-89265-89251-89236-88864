@@ -4,7 +4,7 @@
 
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">All Statistics {{ work }}</h4>
+                        <h4 class="page-title">All Statistics</h4>
                     </div>
                 </div>
             </div>
@@ -253,8 +253,8 @@
            // ==============================================================
             // Real Time Visits
             // ==============================================================
-            var data = {{ work }},
-                totalPoints = {{ work.length }};
+            var data = {{ work|safe }},
+                totalPoints = {{ work.length|safe }};
 
             function getRandomData() {
                 if (data.length > 0) data = data.slice(1);
@@ -312,7 +312,7 @@
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "Visits: " + {{ work.first }} +"x",
+                    content: "Visits: x",
                     defaultTheme: false
                 }
             });

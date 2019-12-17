@@ -44,10 +44,15 @@ def charts_view(request, id):
     work = []
     if result.status_code == status.HTTP_200_OK:
         data = result.json()
+        print(data)
         for obj in data:
             if obj['user_id'] == id:
                 for o in obj['bits']:
-                    work.append(str(o))
+                    try:
+                        o = float(o)
+                        work.append(o)
+                    except ValueError:
+                        pass
     return render(request, "charts.html", {'user': user, 'work': work})
 
 
