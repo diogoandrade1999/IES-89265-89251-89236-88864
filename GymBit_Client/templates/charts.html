@@ -8,6 +8,8 @@
                     </div>
                 </div>
             </div>
+
+    <div id="chart-1">{{ output|safe }}</div>
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
@@ -220,6 +222,14 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
+    <!-- Chart js -->
+        <script type="text/javascript" src="{% static "fusioncharts/fusioncharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "fusioncharts/themes/fusioncharts.theme.fint.js" %}"></script>
+
+        <script type="text/javascript" src="{% static "fusioncharts/fusioncharts.js" %}"></script>
+    <script type="text/javascript" src="{% static "fusioncharts/fusioncharts.charts.js" %}"></script>
+    <script type="text/javascript" src="{% static "fusioncharts/themes/fusioncharts.theme.fusion.js" %}"></script>
+
     <script src="{% static 'assets/libs/jquery/dist/jquery.min.js' %}"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{% static 'assets/libs/popper.js/dist/umd/popper.min.js' %}"></script>
@@ -255,6 +265,8 @@
             // ==============================================================
             var data = {{ work|safe }},
                 totalPoints = {{ work.length|safe }};
+
+            console.log(data)
 
             function getRandomData() {
                 if (data.length > 0) data = data.slice(1);
@@ -312,7 +324,7 @@
                 },
                 tooltip: true,
                 tooltipOpts: {
-                    content: "Visits: x",
+                    content: ": x",
                     defaultTheme: false
                 }
             });
