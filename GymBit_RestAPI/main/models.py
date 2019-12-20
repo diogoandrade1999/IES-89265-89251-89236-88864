@@ -1,7 +1,6 @@
 import mongoengine
 
 
-'''
 mongoengine.connect(
     db='ies_db',
     username='ies_user',
@@ -13,6 +12,7 @@ mongoengine.connect(
     db='ies_db',
     host='localhost'
 )
+'''
 
 
 class ExercisesModel(mongoengine.EmbeddedDocument):
@@ -40,7 +40,7 @@ class UserModel(mongoengine.Document):
     weight = mongoengine.FloatField()
     height = mongoengine.FloatField()
     personal_trainer = mongoengine.StringField()
-    medical_condicions = mongoengine.StringField()
+    medical_conditions = mongoengine.StringField()
 
 
 class BitModel(mongoengine.Document):
