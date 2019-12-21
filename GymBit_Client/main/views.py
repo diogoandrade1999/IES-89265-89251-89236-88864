@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from datetime import datetime, date
 
 import requests
@@ -7,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from main.fusioncharts import FusionCharts
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -18,12 +16,12 @@ from GymBit_Client.settings import API_URL
 def login_view(request):
     if request.method == 'POST':
         password = request.POST['password']
-        email = request.POST['email']
-        if User.objects.filter(username=email).exists():
-            user = authenticate(username=email, password=password)
+        username = request.POST['username']
+        if User.objects.filter(username=username).exists():
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("trainees.html")
+                return redirect("index.html")
     return render(request, "login.html")
 
 
@@ -44,9 +42,9 @@ def index_view(request):
     # get the trainee from the api
     result = requests.get(API_URL + "trainees")
     users = []
+    news = 0
     if result.status_code == status.HTTP_200_OK:
         users = result.json()
-        news = 0
         for u in users:
             if calc_weeks(u['start']) < 5:
                 news += 1
@@ -55,28 +53,6 @@ def index_view(request):
 
 @login_required
 def charts_view(request, id):
-    # Chart data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
-    dataSource = {}
-    dataSource['chart'] = {
-        "caption": "Monthly revenue for last year",
-        "subCaption": "Harry's SuperMart",
-        "xAxisName": "Month",
-        "yAxisName": "Revenues (In USD)",
-        "numberPrefix": "$",
-        "theme": "zune"
-    }
-
-    # The data for the chart should be in an array where each element of the array is a JSON object
-    # having the `label` and `value` as key value pair.
-
-    dataSource['data'] = []
-    # Iterate through the data in `Revenue` model and insert in to the `dataSource['data']` list.
-    for key in range(5):
-        data = {}
-        data['label'] = 'teste'
-        data['value'] = 5
-        dataSource['data'].append(data)
-
     # get the trainee from the api
     result = requests.get(API_URL + "trainees/" + str(id))
     user = []
@@ -96,9 +72,7 @@ def charts_view(request, id):
                         count += 1
                     except ValueError:
                         pass
-    # Create an object for the Column 2D chart using the FusionCharts class constructor
-    column2D = FusionCharts("column2D", "ex1", "600", "350", "chart-1", "json", dataSource)
-    return render(request, "charts.html", {'user': user, 'work': work[-200:], 'output': column2D.render()})
+    return render(request, "charts.html", {'user': user, 'work': work[-200:]})
 
 
 @login_required
